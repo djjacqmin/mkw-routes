@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MKW Intermission Routes</title>
+<title>MKW Intermission Explorer</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -36,10 +36,39 @@ header {
   box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.header-top .logo { font-size: 28px; }
+
+.header-top h1 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.header-top h1 small {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 400;
+  opacity: 0.85;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Nav tabs */
 .nav-tabs {
   display: flex;
   gap: 2px;
-  margin-top: 14px;
 }
 
 .nav-tab {
@@ -57,203 +86,297 @@ header {
 .nav-tab:hover { color: white; background: rgba(255,255,255,0.12); }
 .nav-tab.active { background: var(--bg); color: var(--red); }
 
-.header-inner {
-  max-width: 680px;
+/* ── Filter bar ── */
+.filter-bar {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+.filter-inner {
+  max-width: 1200px;
   margin: 0 auto;
-}
-
-.header-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 14px;
-}
-
-.header-title .logo { font-size: 28px; }
-
-.header-title h1 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.header-title h1 small {
-  display: block;
-  font-size: 0.68rem;
-  font-weight: 400;
-  opacity: 0.85;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-/* Quick find */
-.quick-find {
   display: flex;
   gap: 8px;
-  margin-bottom: 12px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-.qf-input-wrap {
-  flex: 1;
-  min-width: 0;
-  position: relative;
-}
-
-.quick-find input {
-  width: 100%;
-  padding: 10px 14px;
-  font-size: 0.95rem;
-  border: none;
-  border-radius: 8px;
+.filter-select {
+  padding: 7px 26px 7px 10px;
+  font-size: 0.83rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
   background: white;
   color: var(--text);
-  outline: none;
-}
-
-.quick-find input::placeholder { color: #999; }
-
-.surprise-btn {
-  padding: 10px 14px;
-  font-size: 0.88rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  background: white;
-  color: var(--red);
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: background 0.15s;
-}
-
-.surprise-btn:hover { background: #ffe0e3; }
-
-/* Autocomplete dropdown */
-.autocomplete-list {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0; right: 0;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
-  max-height: 220px;
-  overflow-y: auto;
-  z-index: 200;
-  display: none;
-}
-
-.autocomplete-list.open { display: block; }
-
-.autocomplete-item {
-  padding: 10px 14px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  border-bottom: 1px solid #f0f0f0;
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-
-.autocomplete-item:last-child { border-bottom: none; }
-.autocomplete-item:hover, .autocomplete-item.focused { background: #f5f5f5; }
-
-.ac-label {
-  font-family: "SF Mono", "Fira Code", Consolas, monospace;
-  font-weight: 700;
-  color: var(--blue);
-  flex-shrink: 0;
-  font-size: 0.85rem;
-}
-
-.ac-tracks {
-  color: var(--muted);
-  font-size: 0.82rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Track selectors */
-.selectors {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.selectors select {
-  flex: 1;
-  padding: 10px 10px;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.18);
-  color: white;
   outline: none;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='white' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: 28px;
+  background-position: right 8px center;
   min-width: 0;
+  max-width: 200px;
 }
 
-.selectors select option { color: var(--text); background: white; }
-.selectors select:disabled { opacity: 0.5; cursor: not-allowed; }
+.filter-select:focus { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(0,87,184,0.12); }
+.filter-select option { color: var(--text); }
 
-.sel-arrow {
-  color: rgba(255,255,255,0.8);
-  font-size: 1.3rem;
+.filter-sep {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
   flex-shrink: 0;
 }
 
-/* ── Main content ── */
-main {
-  max-width: 680px;
-  margin: 0 auto;
-  padding: 20px 16px 40px;
+.btn-clear {
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s;
 }
 
-/* Empty / prompt state */
-.prompt-state {
+.btn-clear:hover { border-color: var(--red); color: var(--red); }
+
+.results-count {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── Main ── */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+/* ── Tile grid ── */
+.tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+@media (max-width: 860px) {
+  .tiles-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .tiles-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Tile ── */
+.tile {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.tile:hover, .tile:focus-visible {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.tile:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+.tile-thumb {
+  aspect-ratio: 16/9;
+  background: linear-gradient(145deg, #1c1c2e 0%, #2a2a42 60%, #1e2a4a 100%);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Subtle grid-line texture */
+.tile-thumb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.tile-play {
+  color: rgba(255,255,255,0.25);
+  transition: color 0.15s, transform 0.15s;
+  position: relative;
+  z-index: 1;
+}
+
+.tile:hover .tile-play,
+.tile:focus-visible .tile-play {
+  color: rgba(255,255,255,0.55);
+  transform: scale(1.1);
+}
+
+.tile-label {
+  position: absolute;
+  bottom: 9px;
+  left: 10px;
+  font-family: "SF Mono", "Fira Code", Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 0.04em;
+  z-index: 1;
+}
+
+.tile-body {
+  padding: 10px 12px 11px;
+}
+
+.tile-tracks {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+  margin-bottom: 7px;
+}
+
+.t-source { color: var(--muted); font-weight: 500; }
+.t-arrow  { color: var(--red); margin: 0 4px; }
+.t-dest   { color: var(--text); }
+
+.tile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 0;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.70rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+.badge-gp    { background: #dbeafe; color: #1d4ed8; }
+.badge-kt    { background: #dcfce7; color: #166534; }
+.badge-extra { background: #fef9c3; color: #854d0e; }
+
+/* ── No-results ── */
+.no-results {
   text-align: center;
   padding: 60px 20px;
   color: var(--muted);
+  font-size: 1rem;
+  display: none;
 }
 
-.prompt-state .prompt-icon { font-size: 3.5rem; margin-bottom: 12px; }
-.prompt-state p { font-size: 1rem; line-height: 1.5; }
-
-/* Route display */
-.route-display { display: none; }
-.route-display.visible { display: block; }
-
-/* Route header */
-.route-header {
-  margin-bottom: 16px;
+/* ── Modal overlay ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.52);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s;
 }
 
-.route-label-line {
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Modal panel ── */
+.modal {
+  background: white;
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 630px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+  transform: translateY(14px) scale(0.99);
+  transition: transform 0.18s;
+  overscroll-behavior: contain;
+}
+
+.modal-overlay.open .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 16px 16px 13px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.modal-label {
   font-family: "SF Mono", "Fira Code", Consolas, monospace;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--blue);
+  margin-bottom: 3px;
   letter-spacing: 0.03em;
-  margin-bottom: 4px;
 }
 
-.route-tracks-line {
-  font-size: 1.2rem;
+.modal-tracks {
+  font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.3;
 }
 
-.track-source { color: var(--muted); font-weight: 500; }
-.track-arrow { color: var(--red); margin: 0 6px; }
-.track-dest { color: var(--text); }
+.modal-source { color: var(--muted); font-weight: 500; }
+.modal-arrow  { color: var(--red); margin: 0 6px; }
 
-/* Video placeholder */
+.btn-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 5px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  transition: color 0.12s, background 0.12s;
+  line-height: 0;
+}
+
+.btn-close:hover { color: var(--text); background: #f0f0f0; }
+
+.modal-body {
+  padding: 16px;
+}
+
+/* Video in modal */
 .video-wrap {
   background: #c8c8c8;
   border-radius: var(--radius);
@@ -323,7 +446,7 @@ main {
   font-size: 0.82rem;
   color: var(--muted);
   flex-shrink: 0;
-  width: 160px;
+  width: 155px;
   font-weight: 500;
 }
 
@@ -341,9 +464,7 @@ main {
   gap: 5px;
 }
 
-.fact-value.no {
-  color: #bbb;
-}
+.fact-value.no { color: #bbb; }
 
 /* Notes card */
 .notes-card {
@@ -361,10 +482,11 @@ main {
 
 .notes-card .note-icon { flex-shrink: 0; font-size: 1rem; margin-top: 1px; }
 
-@media (max-width: 440px) {
+/* ── Responsive tweaks ── */
+@media (max-width: 600px) {
+  .filter-select { flex: 1 1 calc(50% - 4px); max-width: none; }
+  .results-count { margin-left: 0; order: 99; width: 100%; text-align: right; }
   .fact-label { width: 130px; }
-  .selectors { flex-direction: column; align-items: stretch; }
-  .sel-arrow { text-align: center; transform: rotate(90deg); display: block; }
 }
 </style>
 </head>
@@ -372,279 +494,336 @@ main {
 
 <header>
   <div class="header-inner">
-    <div class="header-title">
+    <div class="header-top">
       <span class="logo">🏎️</span>
       <h1>MKW Intermission Routes<small>Mario Kart World</small></h1>
     </div>
-
-    <!-- Quick find -->
-    <div class="quick-find">
-      <div class="qf-input-wrap">
-        <input type="text" id="label-input" placeholder="Quick find: type a route label (e.g. rSGB-MBC)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        <div class="autocomplete-list" id="ac-list"></div>
-      </div>
-      <button class="surprise-btn" id="surprise-btn">🎲 Surprise me</button>
-    </div>
-
-    <!-- Source / Destination selectors -->
-    <div class="selectors">
-      <select id="source-select">
-        <option value="">Source track…</option>
-      </select>
-      <span class="sel-arrow">→</span>
-      <select id="dest-select" disabled>
-        <option value="">Destination…</option>
-      </select>
-    </div>
-
-    <!-- Page nav -->
     <nav class="nav-tabs">
-      <a href="index.html" class="nav-tab active">Finder</a>
-      <a href="explorer.html" class="nav-tab">Explorer</a>
+      <a href="index.html" class="nav-tab">Finder</a>
+      <a href="explorer.html" class="nav-tab active">Explorer</a>
     </nav>
   </div>
 </header>
 
-<main>
-  <!-- Prompt / empty state -->
-  <div class="prompt-state" id="prompt-state">
-    <div class="prompt-icon">🗺️</div>
-    <p>Select a source and destination track,<br>or type a route label to get started.</p>
+<div class="filter-bar">
+  <div class="filter-inner">
+    <select class="filter-select" id="f-source" aria-label="Source track">
+      <option value="">Any Source</option>
+    </select>
+    <select class="filter-select" id="f-dest" aria-label="Destination track">
+      <option value="">Any Destination</option>
+    </select>
+    <div class="filter-sep"></div>
+    <select class="filter-select" id="f-gp" aria-label="Grand Prix">
+      <option value="">Any Grand Prix</option>
+      <option value="none">No Grand Prix</option>
+      <option value="any">All Grand Prix</option>
+    </select>
+    <select class="filter-select" id="f-kt" aria-label="Knockout Tour">
+      <option value="">Any Knockout Tour</option>
+      <option value="none">No Knockout Tour</option>
+      <option value="any">All Knockout Tours</option>
+    </select>
+    <div class="filter-sep"></div>
+    <select class="filter-select" id="f-variant" aria-label="Track variant">
+      <option value="">Any Variant</option>
+    </select>
+    <select class="filter-select" id="f-entrance" aria-label="Track entrance">
+      <option value="">Any Entrance</option>
+    </select>
+    <button class="btn-clear" id="f-clear">Clear</button>
+    <span class="results-count" id="results-count"></span>
   </div>
+</div>
 
-  <!-- Route display -->
-  <div class="route-display" id="route-display">
-    <div class="route-header">
-      <div class="route-label-line" id="disp-label"></div>
-      <div class="route-tracks-line">
-        <span class="track-source" id="disp-source"></span>
-        <span class="track-arrow">→</span>
-        <span class="track-dest" id="disp-dest"></span>
+<main>
+  <div class="tiles-grid" id="tiles-grid"></div>
+  <div class="no-results" id="no-results">No routes match the selected filters.</div>
+</main>
+
+<!-- Route detail modal -->
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="m-label">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-label" id="m-label"></div>
+        <div class="modal-tracks">
+          <span class="modal-source" id="m-source"></span>
+          <span class="modal-arrow">→</span>
+          <span id="m-dest"></span>
+        </div>
+      </div>
+      <button class="btn-close" id="modal-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div id="m-video-container"></div>
+      <div class="facts-card">
+        <div class="facts-card-title">Route Details</div>
+        <div id="m-facts-body"></div>
+      </div>
+      <div class="notes-card" id="m-notes-card" style="display:none">
+        <span class="note-icon">📝</span>
+        <span id="m-notes-text"></span>
       </div>
     </div>
-
-    <div id="video-container"></div>
-
-    <div class="facts-card">
-      <div class="facts-card-title">Route Details</div>
-      <div id="facts-body"></div>
-    </div>
-
-    <div class="notes-card" id="notes-card" style="display:none">
-      <span class="note-icon">📝</span>
-      <span id="notes-text"></span>
-    </div>
   </div>
-</main>
+</div>
 
 <script>
 const ROUTES = [{"source": "Shy Guy Bazaar", "destination": "Mario Bros. Circuit", "label": "rSGB-MBC", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cloud Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Spaceport", "destination": "Mario Bros. Circuit", "label": "DKS-MBC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": "one-way"}, {"source": "Desert Hills", "destination": "Mario Bros. Circuit", "label": "rDH-MBC", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Golden Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "Mario Bros. Circuit", "label": "CC-MBC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Whistlestop Summit", "destination": "Mario Bros. Circuit", "label": "WS-MBC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Mario Bros. Circuit", "label": "rCM-MBC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Reverse, center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Stadium", "destination": "Mario Bros. Circuit", "label": "rWS-MBC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Reverse, center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Mario Bros. Circuit", "label": "rTF-MBC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Reverse, center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Bros. Circuit", "destination": "Crown City", "label": "MBC-CC", "usedInGP": true, "grandPrix": "Mushroom Cup", "usedInKT": true, "knockoutTour": "Cloud Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Mushroom Cup / Normal Section 2", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Desert Hills", "destination": "Crown City", "label": "rDH-CC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Mushroom Cup / Normal Section 2", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Whistlestop Summit", "destination": "Crown City", "label": "WS-CC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Mushroom Cup / Normal Section 2", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Stadium", "destination": "Crown City", "label": "rWS-CC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Mushroom Cup / Normal Section 2", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Faraway Oasis", "destination": "Crown City", "label": "FO-CC", "usedInGP": true, "grandPrix": "Shell Cup", "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Shell Cup / Extended & reverse section 1", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Koopa Troopa Beach", "destination": "Crown City", "label": "rKTB-CC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Shell Cup / Extended & reverse section 1", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Spaceport", "destination": "Crown City", "label": "DKS-CC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Shell Cup / Extended & reverse section 1", "trackVariantAlt": null, "trackEntrance": "Shell Cup, beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Stadium", "destination": "Crown City", "label": "PS-CC", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Ice Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Third layout / Extended section 3", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Crown City", "label": "rCM-CC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Third layout / Extended section 3", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Moo Moo Meadows", "destination": "Crown City", "label": "rMMM-CC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Third layout / Extended section 3", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "Whistlestop Summit", "label": "CC-WS", "usedInGP": true, "grandPrix": "Mushroom Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Spaceport", "destination": "Whistlestop Summit", "label": "DKS-WS", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cherry Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Desert Hills", "destination": "Whistlestop Summit", "label": "rDH-WS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Whistlestop Summit", "label": "rCM-WS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Bros. Circuit", "destination": "Whistlestop Summit", "label": "MBC-WS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Whistlestop Summit", "destination": "DK Spaceport", "label": "WS-DKS", "usedInGP": true, "grandPrix": "Mushroom Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Koopa Troopa Beach", "destination": "DK Spaceport", "label": "rKTB-DKS", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cherry Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "DK Spaceport", "label": "CC-DKS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Shy Guy Bazaar", "destination": "Desert Hills", "label": "rSGB-rDH", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Spaceport", "destination": "Desert Hills", "label": "DKS-rDH", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": "one-way"}, {"source": "Whistlestop Summit", "destination": "Desert Hills", "label": "WS-rDH", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cherry Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Bros. Circuit", "destination": "Desert Hills", "label": "MBC-rDH", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "Desert Hills", "label": "CC-rDH", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Desert Hills", "destination": "Shy Guy Bazaar", "label": "rDH-rSGB", "usedInGP": true, "grandPrix": "Flower Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Bros. Circuit", "destination": "Shy Guy Bazaar", "label": "MBC-rSGB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Shy Guy Bazaar", "label": "rCM-rSGB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Airship Fortress", "destination": "Shy Guy Bazaar", "label": "rAF-rSGB", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cloud Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Daisy's palace section", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Stadium", "destination": "Shy Guy Bazaar", "label": "rWS-rSGB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Daisy's palace section", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Shy Guy Bazaar", "destination": "Wario Stadium", "label": "rSGB-rWS", "usedInGP": true, "grandPrix": "Flower Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "Wario Stadium", "label": "CC-rWS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Wario Stadium", "label": "rCM-rWS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Bros. Circuit", "destination": "Wario Stadium", "label": "MBC-rWS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Wario Stadium", "label": "rTF-rWS", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Acorn Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Airship Fortress", "destination": "Wario Stadium", "label": "rAF-rWS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Bowser's Castle", "destination": "Wario Stadium", "label": "BC-rWS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dry Bones Burnout", "destination": "Wario Stadium", "label": "DBB-rWS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Stadium", "destination": "Airship Fortress", "label": "rWS-rAF", "usedInGP": true, "grandPrix": "Flower Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Bowser's Castle", "destination": "Airship Fortress", "label": "BC-rAF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Airship Fortress", "label": "rTF-rAF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dry Bones Burnout", "destination": "Airship Fortress", "label": "DBB-rAF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Shy Guy Bazaar", "destination": "Airship Fortress", "label": "rSGB-rAF", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Heart Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Starview Peak", "destination": "DK Pass", "label": "SP-rDKP", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Spiny Rally", "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "DK Pass", "label": "CCF-rDKP", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Acorn Rally", "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Sky-High Sundae", "destination": "DK Pass", "label": "rSHS-rDKP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "DK Pass", "label": "DD-rDKP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Moo Moo Meadows", "destination": "DK Pass", "label": "rMMM-rDKP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Shipyard", "destination": "DK Pass", "label": "rWSh-rDKP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Salty Salty Speedway", "destination": "DK Pass", "label": "SSS-rDKP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Pass", "destination": "Starview Peak", "label": "rDKP-SP", "usedInGP": true, "grandPrix": "Star Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Sky-High Sundae", "destination": "Starview Peak", "label": "rSHS-SP", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Ice Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Boo Cinema", "destination": "Starview Peak", "label": "BCi-SP", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Spiny Rally", "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "Starview Peak", "label": "DD-SP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Starview Peak", "label": "rMC-SP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "Starview Peak", "label": "CCF-SP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Shipyard", "destination": "Starview Peak", "label": "rWSh-SP", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Starview Peak", "destination": "Sky-High Sundae", "label": "SP-rSHS", "usedInGP": true, "grandPrix": "Star Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Shipyard", "destination": "Sky-High Sundae", "label": "rWSh-rSHS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "Sky-High Sundae", "label": "DD-rSHS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Pass", "destination": "Sky-High Sundae", "label": "rDKP-rSHS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Sky-High Sundae", "destination": "Wario Shipyard", "label": "rSHS-rWSh", "usedInGP": true, "grandPrix": "Star Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Pass", "destination": "Wario Shipyard", "label": "rDKP-rWSh", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Starview Peak", "destination": "Wario Shipyard", "label": "SP-rWSh", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "Wario Shipyard", "label": "CCF-rWSh", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Salty Salty Speedway", "destination": "Wario Shipyard", "label": "SSS-rWSh", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Beach", "destination": "Wario Shipyard", "label": "rPB-rWSh", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Spiny Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Great ? Block Ruins", "destination": "Koopa Troopa Beach", "label": "GBR-rKTB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": "one-way"}, {"source": "Dino Dino Jungle", "destination": "Koopa Troopa Beach", "label": "rDDJ-rKTB", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cherry Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Faraway Oasis", "destination": "Koopa Troopa Beach", "label": "FO-rKTB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Stadium", "destination": "Koopa Troopa Beach", "label": "PS-rKTB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Desert Hills", "destination": "Koopa Troopa Beach", "label": "rDH-rKTB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": "one-way, 5 sections"}, {"source": "Whistlestop Summit", "destination": "Koopa Troopa Beach", "label": "WS-rKTB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": "one-way"}, {"source": "Crown City", "destination": "Koopa Troopa Beach", "label": "CC-rKTB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Spaceport", "destination": "Koopa Troopa Beach", "label": "DKS-rKTB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Koopa Troopa Beach", "destination": "Faraway Oasis", "label": "rKTB-FO", "usedInGP": true, "grandPrix": "Shell Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "Faraway Oasis", "label": "CC-FO", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cloud Rally", "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "Faraway Oasis", "label": "CCF-FO", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Moon Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dino Dino Jungle", "destination": "Faraway Oasis", "label": "rDDJ-FO", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Stadium", "destination": "Faraway Oasis", "label": "PS-FO", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Great ? Block Ruins", "destination": "Faraway Oasis", "label": "GBR-FO", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Salty Salty Speedway", "destination": "Faraway Oasis", "label": "SSS-FO", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Beach", "destination": "Faraway Oasis", "label": "rPB-FO", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Peach Stadium", "label": "rMC-PS", "usedInGP": true, "grandPrix": "Special Cup", "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": "one-way, 5 sections"}, {"source": "Moo Moo Meadows", "destination": "Peach Stadium", "label": "rMMM-PS", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Heart Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Peach Stadium", "label": "rTF-PS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Spaceport", "destination": "Peach Stadium", "label": "DKS-PS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": "one-way, 5 sections"}, {"source": "Koopa Troopa Beach", "destination": "Peach Stadium", "label": "rKTB-PS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "Peach Stadium", "label": "CC-PS", "usedInGP": true, "grandPrix": "Shell Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Shell Cup / Battle section", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Peach Stadium", "label": "rCM-PS", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Acorn Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Shell Cup / Battle section", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "Peach Stadium", "label": "CCF-PS", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Ice Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Shell Cup / Battle section", "trackVariantAlt": null, "trackEntrance": "Shell Cup / Battle section (mirrored)", "trackEntranceAlt": null, "notes": null}, {"source": "Faraway Oasis", "destination": "Peach Stadium", "label": "FO-PS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Shell Cup / Battle section", "trackVariantAlt": null, "trackEntrance": "Shell Cup / Battle section (mirrored)", "trackEntranceAlt": null, "notes": null}, {"source": "Salty Salty Speedway", "destination": "Peach Beach", "label": "SSS-rPB", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Spiny Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Sections 2 & 3 only", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Great ? Block Ruins", "destination": "Peach Beach", "label": "GBR-rPB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Sections 2 & 3 only", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dino Dino Jungle", "destination": "Peach Beach", "label": "rDDJ-rPB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Sections 2 & 3 only", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Faraway Oasis", "destination": "Peach Beach", "label": "FO-rPB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Sections 2 & 3 only", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Shipyard", "destination": "Peach Beach", "label": "rWSh-rPB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Sections 2 & 3 only", "trackVariantAlt": null, "trackEntrance": "Sections 2 & 3, center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Beach", "destination": "Salty Salty Speedway", "label": "rPB-SSS", "usedInGP": true, "grandPrix": "Banana Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dino Dino Jungle", "destination": "Salty Salty Speedway", "label": "rDDJ-SSS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Great ? Block Ruins", "destination": "Salty Salty Speedway", "label": "GBR-SSS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Sky-High Sundae", "destination": "Salty Salty Speedway", "label": "rSHS-SSS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance 1", "trackEntranceAlt": null, "notes": "one-way"}, {"source": "DK Pass", "destination": "Salty Salty Speedway", "label": "rDKP-SSS", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Spiny Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance 1", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Shipyard", "destination": "Salty Salty Speedway", "label": "rWSh-SSS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance 1", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "Salty Salty Speedway", "label": "CCF-SSS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance 2", "trackEntranceAlt": null, "notes": null}, {"source": "Faraway Oasis", "destination": "Salty Salty Speedway", "label": "FO-SSS", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance 2", "trackEntranceAlt": null, "notes": null}, {"source": "Salty Salty Speedway", "destination": "Dino Dino Jungle", "label": "SSS-rDDJ", "usedInGP": true, "grandPrix": "Banana Cup", "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Beach", "destination": "Dino Dino Jungle", "label": "rPB-rDDJ", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cherry Rally", "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Great ? Block Ruins", "destination": "Dino Dino Jungle", "label": "GBR-rDDJ", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Faraway Oasis", "destination": "Dino Dino Jungle", "label": "FO-rDDJ", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Koopa Troopa Beach", "destination": "Dino Dino Jungle", "label": "rKTB-rDDJ", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Dino Dino Jungle", "destination": "Great ? Block Ruins", "label": "rDDJ-GBR", "usedInGP": true, "grandPrix": "Banana Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Faraway Oasis", "destination": "Great ? Block Ruins", "label": "FO-GBR", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Cloud Rally", "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Beach", "destination": "Great ? Block Ruins", "label": "rPB-GBR", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Salty Salty Speedway", "destination": "Great ? Block Ruins", "label": "SSS-GBR", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Sky-High Sundae", "destination": "Cheep Cheep Falls", "label": "rSHS-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": "one-way"}, {"source": "Peach Stadium", "destination": "Cheep Cheep Falls", "label": "PS-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Acorn Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Salty Salty Speedway", "destination": "Cheep Cheep Falls", "label": "SSS-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Faraway Oasis", "destination": "Cheep Cheep Falls", "label": "FO-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Pass", "destination": "Cheep Cheep Falls", "label": "rDKP-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Cheep Cheep Falls", "label": "rCM-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Starview Peak", "destination": "Cheep Cheep Falls", "label": "SP-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Moo Moo Meadows", "destination": "Cheep Cheep Falls", "label": "rMMM-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Shipyard", "destination": "Cheep Cheep Falls", "label": "rWSh-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "Cheep Cheep Falls", "label": "DD-CCF", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Ice Rally, Moon Rally", "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "Dandelion Depths", "label": "CCF-DD", "usedInGP": true, "grandPrix": "Leaf Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Moo Moo Meadows", "destination": "Dandelion Depths", "label": "rMMM-DD", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Moon Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Starview Peak", "destination": "Dandelion Depths", "label": "SP-DD", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Ice Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Sky-High Sundae", "destination": "Dandelion Depths", "label": "rSHS-DD", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Pass", "destination": "Dandelion Depths", "label": "rDKP-DD", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Dandelion Depths", "label": "rMC-DD", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Dandelion Depths", "label": "rTF-DD", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Boo Cinema", "destination": "Dandelion Depths", "label": "BCi-DD", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Acorn Heights", "destination": "Dandelion Depths", "label": "AH-DD", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "Boo Cinema", "label": "DD-BCi", "usedInGP": true, "grandPrix": "Leaf Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dry Bones Burnout", "destination": "Boo Cinema", "label": "DBB-BCi", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Starview Peak", "destination": "Boo Cinema", "label": "SP-BCi", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Acorn Heights", "destination": "Boo Cinema", "label": "AH-BCi", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Boo Cinema", "label": "rMC-BCi", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Boo Cinema", "destination": "Dry Bones Burnout", "label": "BCi-DBB", "usedInGP": true, "grandPrix": "Leaf Cup", "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Acorn Heights", "destination": "Dry Bones Burnout", "label": "AH-DBB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Dry Bones Burnout", "label": "rTF-DBB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Bowser's Castle", "destination": "Dry Bones Burnout", "label": "BC-DBB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Stadium", "destination": "Dry Bones Burnout", "label": "rWS-DBB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Moo Moo Meadows", "destination": "Dry Bones Burnout", "label": "rMMM-DBB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Dry Bones Burnout", "label": "rMC-DBB", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Airship Fortress", "destination": "Dry Bones Burnout", "label": "rAF-DBB", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Heart Rally", "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Moo Moo Meadows", "label": "rCM-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Golden Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Moo Moo Meadows", "label": "rTF-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Moon Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "Moo Moo Meadows", "label": "CC-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Moo Moo Meadows", "label": "rMC-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Heart Rally", "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "Moo Moo Meadows", "label": "DD-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dry Bones Burnout", "destination": "Moo Moo Meadows", "label": "DBB-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "DK Pass", "destination": "Moo Moo Meadows", "label": "rDKP-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Stadium", "destination": "Moo Moo Meadows", "label": "PS-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "Moo Moo Meadows", "label": "CCF-rMMM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Reverse", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Moo Moo Meadows", "destination": "Choco Mountain", "label": "rMMM-rCM", "usedInGP": true, "grandPrix": "Lightning Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Stadium", "destination": "Choco Mountain", "label": "PS-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Crown City", "destination": "Choco Mountain", "label": "CC-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Cheep Cheep Falls", "destination": "Choco Mountain", "label": "CCF-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Choco Mountain", "label": "rTF-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Stadium", "destination": "Choco Mountain", "label": "rWS-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Acorn Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Bros. Circuit", "destination": "Choco Mountain", "label": "MBC-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Golden Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Whistlestop Summit", "destination": "Choco Mountain", "label": "WS-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Shy Guy Bazaar", "destination": "Choco Mountain", "label": "rSGB-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Bowser's Castle", "destination": "Choco Mountain", "label": "BC-rCM", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Toad's Factory", "label": "rCM-rTF", "usedInGP": true, "grandPrix": "Lightning Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Moo Moo Meadows", "destination": "Toad's Factory", "label": "rMMM-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Bros. Circuit", "destination": "Toad's Factory", "label": "MBC-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Stadium", "destination": "Toad's Factory", "label": "PS-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Toad's Factory", "label": "rMC-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "Toad's Factory", "label": "DD-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Bowser's Castle", "destination": "Toad's Factory", "label": "BC-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Moon Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Stadium", "destination": "Toad's Factory", "label": "rWS-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Airship Fortress", "destination": "Toad's Factory", "label": "rAF-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Dry Bones Burnout", "destination": "Toad's Factory", "label": "DBB-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Acorn Heights", "destination": "Toad's Factory", "label": "AH-rTF", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Beginning skipped", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Bowser's Castle", "label": "rTF-BC", "usedInGP": true, "grandPrix": "Lightning Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dry Bones Burnout", "destination": "Bowser's Castle", "label": "DBB-BC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Airship Fortress", "destination": "Bowser's Castle", "label": "rAF-BC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Wario Stadium", "destination": "Bowser's Castle", "label": "rWS-BC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Choco Mountain", "destination": "Bowser's Castle", "label": "rCM-BC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Bowser's Castle", "label": "rMC-BC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Mario Circuit", "destination": "Acorn Heights", "label": "rMC-AH", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Golden Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Boo Cinema", "destination": "Acorn Heights", "label": "BCi-AH", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "Acorn Heights", "label": "DD-AH", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dry Bones Burnout", "destination": "Acorn Heights", "label": "DBB-AH", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Acorn Heights", "label": "rTF-AH", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Center entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Acorn Heights", "destination": "Mario Circuit", "label": "AH-rMC", "usedInGP": true, "grandPrix": "Special Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "All sections", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Boo Cinema", "destination": "Mario Circuit", "label": "BCi-rMC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Section 1", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dry Bones Burnout", "destination": "Mario Circuit", "label": "DBB-rMC", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Heart Rally", "extraSections": false, "differentFromReverse": false, "trackVariant": "Section 2", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Toad's Factory", "destination": "Mario Circuit", "label": "rTF-rMC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Section 2", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Bowser's Castle", "destination": "Mario Circuit", "label": "BC-rMC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": true, "trackVariant": "Section 2", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Moo Moo Meadows", "destination": "Mario Circuit", "label": "rMMM-rMC", "usedInGP": false, "grandPrix": null, "usedInKT": true, "knockoutTour": "Golden Rally", "extraSections": false, "differentFromReverse": true, "trackVariant": "Section 3", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Dandelion Depths", "destination": "Mario Circuit", "label": "DD-rMC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Section 3", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Starview Peak", "destination": "Mario Circuit", "label": "SP-rMC", "usedInGP": false, "grandPrix": null, "usedInKT": false, "knockoutTour": null, "extraSections": true, "differentFromReverse": false, "trackVariant": "Section 3", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": null}, {"source": "Peach Stadium", "destination": "Rainbow Road", "label": "PS-RR", "usedInGP": true, "grandPrix": "Special Cup", "usedInKT": false, "knockoutTour": null, "extraSections": false, "differentFromReverse": false, "trackVariant": "Normal track", "trackVariantAlt": null, "trackEntrance": "Normal entrance", "trackEntranceAlt": null, "notes": "one-way"}];
 
-// ── Build lookup structures ──
-const byLabel = {};
-const byPair = {};
-const sourceSet = new Set();
-const destsBySource = {};
+// ── Build filter option sets ──
+const sourceSet   = new Set();
+const destSet     = new Set();
+const gpSet       = new Set();
+const ktSet       = new Set();
+const variantSet  = new Set();
+const entranceSet = new Set();
 
 ROUTES.forEach(r => {
-  byLabel[r.label.toLowerCase()] = r;
-  const key = r.source + '||' + r.destination;
-  byPair[key] = r;
   sourceSet.add(r.source);
-  if (!destsBySource[r.source]) destsBySource[r.source] = [];
-  destsBySource[r.source].push(r.destination);
-});
-
-const allSources = [...sourceSet].sort();
-
-// ── DOM refs ──
-const sourceEl = document.getElementById('source-select');
-const destEl   = document.getElementById('dest-select');
-const labelEl  = document.getElementById('label-input');
-const acList   = document.getElementById('ac-list');
-const promptEl = document.getElementById('prompt-state');
-const routeEl  = document.getElementById('route-display');
-
-// ── Populate source dropdown ──
-allSources.forEach(s => {
-  const o = document.createElement('option');
-  o.value = s; o.textContent = s;
-  sourceEl.appendChild(o);
-});
-
-// ── Source change ──
-sourceEl.addEventListener('change', () => {
-  const src = sourceEl.value;
-  destEl.innerHTML = '<option value="">Destination…</option>';
-  if (!src) { destEl.disabled = true; showPrompt(); return; }
-  destsBySource[src].sort().forEach(d => {
-    const o = document.createElement('option');
-    o.value = d; o.textContent = d;
-    destEl.appendChild(o);
-  });
-  destEl.disabled = false;
-  showPrompt();
-});
-
-// ── Destination change ──
-destEl.addEventListener('change', () => {
-  const src = sourceEl.value;
-  const dst = destEl.value;
-  if (!src || !dst) { showPrompt(); return; }
-  const route = byPair[src + '||' + dst];
-  if (route) showRoute(route);
-});
-
-// ── Autocomplete ──
-let acIndex = -1;
-let acMatches = [];
-
-labelEl.addEventListener('input', () => {
-  const q = labelEl.value.trim().toLowerCase();
-  acIndex = -1;
-  if (!q) { closeAc(); return; }
-  acMatches = ROUTES.filter(r => r.label.toLowerCase().includes(q)).slice(0, 12);
-  renderAc(q);
-});
-
-labelEl.addEventListener('keydown', e => {
-  if (!acList.classList.contains('open')) return;
-  const items = acList.querySelectorAll('.autocomplete-item');
-  if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    acIndex = Math.min(acIndex + 1, items.length - 1);
-    items.forEach((el, i) => el.classList.toggle('focused', i === acIndex));
-  } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    acIndex = Math.max(acIndex - 1, 0);
-    items.forEach((el, i) => el.classList.toggle('focused', i === acIndex));
-  } else if (e.key === 'Enter') {
-    e.preventDefault();
-    if (acIndex >= 0 && acMatches[acIndex]) pickRoute(acMatches[acIndex]);
-    else if (acMatches.length === 1) pickRoute(acMatches[0]);
-    else {
-      const exact = byLabel[labelEl.value.trim().toLowerCase()];
-      if (exact) pickRoute(exact);
-    }
-  } else if (e.key === 'Escape') {
-    closeAc();
+  destSet.add(r.destination);
+  if (r.grandPrix) gpSet.add(r.grandPrix);
+  if (r.knockoutTour) {
+    r.knockoutTour.split(',').map(s => s.trim()).forEach(k => ktSet.add(k));
   }
+  // Use display value (Alt if present, else primary)
+  const displayVariant  = r.trackVariantAlt  || r.trackVariant;
+  const displayEntrance = r.trackEntranceAlt || r.trackEntrance;
+  if (displayVariant)  variantSet.add(displayVariant);
+  if (displayEntrance) entranceSet.add(displayEntrance);
 });
 
-labelEl.addEventListener('blur', () => {
-  setTimeout(closeAc, 150);
-});
-
-function renderAc(q) {
-  if (!acMatches.length) { closeAc(); return; }
-  acList.innerHTML = acMatches.map((r, i) => `
-    <div class="autocomplete-item" data-i="${i}">
-      <span class="ac-label">${r.label}</span>
-      <span class="ac-tracks">${r.source} → ${r.destination}</span>
-    </div>`).join('');
-  acList.classList.add('open');
-  acList.querySelectorAll('.autocomplete-item').forEach((el, i) => {
-    el.addEventListener('mousedown', () => pickRoute(acMatches[i]));
+function addOptions(selectId, values) {
+  const el = document.getElementById(selectId);
+  [...values].sort().forEach(v => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v;
+    el.appendChild(o);
   });
 }
 
-function closeAc() {
-  acList.classList.remove('open');
-  acIndex = -1;
-}
+// GP in canonical cup order
+const GP_ORDER = ['Mushroom Cup','Flower Cup','Star Cup','Special Cup','Shell Cup','Banana Cup','Leaf Cup','Lightning Cup'];
+const gpEl = document.getElementById('f-gp');
+[...GP_ORDER.filter(g => gpSet.has(g)), ...[...gpSet].filter(g => !GP_ORDER.includes(g)).sort()]
+  .forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; gpEl.appendChild(o); });
 
-document.getElementById('surprise-btn').addEventListener('click', () => {
-  pickRoute(ROUTES[Math.floor(Math.random() * ROUTES.length)]);
+// KT in canonical order
+const KT_ORDER = ['Acorn Rally','Cherry Rally','Cloud Rally','Golden Rally','Heart Rally','Ice Rally','Moon Rally','Spiny Rally'];
+const ktEl = document.getElementById('f-kt');
+[...KT_ORDER.filter(k => ktSet.has(k)), ...[...ktSet].filter(k => !KT_ORDER.includes(k)).sort()]
+  .forEach(k => { const o = document.createElement('option'); o.value = k; o.textContent = k; ktEl.appendChild(o); });
+
+addOptions('f-source',   sourceSet);
+addOptions('f-dest',     destSet);
+addOptions('f-variant',  variantSet);
+addOptions('f-entrance', entranceSet);
+
+// ── Filter state ──
+const F = { source:'', dest:'', gp:'', kt:'', variant:'', entrance:'' };
+
+function onFilterChange(key, id) {
+  document.getElementById(id).addEventListener('change', e => {
+    F[key] = e.target.value;
+    if (key === 'source') refreshDestOptions();
+    renderTiles();
+  });
+}
+onFilterChange('source',   'f-source');
+onFilterChange('dest',     'f-dest');
+onFilterChange('gp',       'f-gp');
+onFilterChange('kt',       'f-kt');
+onFilterChange('variant',  'f-variant');
+onFilterChange('entrance', 'f-entrance');
+
+document.getElementById('f-clear').addEventListener('click', () => {
+  ['f-source','f-dest','f-gp','f-kt','f-variant','f-entrance'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  Object.keys(F).forEach(k => F[k] = '');
+  refreshDestOptions();
+  renderTiles();
 });
 
-function pickRoute(route) {
-  labelEl.value = route.label;
-  closeAc();
-  // Sync dropdowns
-  sourceEl.value = route.source;
-  // Rebuild dest options
-  destEl.innerHTML = '<option value="">Destination…</option>';
-  destsBySource[route.source].sort().forEach(d => {
+function refreshDestOptions() {
+  const el = document.getElementById('f-dest');
+  const prev = F.dest;
+  el.innerHTML = '<option value="">Any Destination</option>';
+  const dests = F.source
+    ? [...new Set(ROUTES.filter(r => r.source === F.source).map(r => r.destination))].sort()
+    : [...destSet].sort();
+  dests.forEach(d => {
     const o = document.createElement('option');
     o.value = d; o.textContent = d;
-    destEl.appendChild(o);
+    el.appendChild(o);
   });
-  destEl.disabled = false;
-  destEl.value = route.destination;
-  showRoute(route);
+  F.dest = dests.includes(prev) ? prev : '';
+  el.value = F.dest;
 }
 
-// ── Display a route ──
-function showPrompt() {
-  promptEl.style.display = '';
-  routeEl.classList.remove('visible');
+// ── Filtering ──
+function getFiltered() {
+  return ROUTES.filter(r => {
+    if (F.source && r.source !== F.source) return false;
+    if (F.dest   && r.destination !== F.dest) return false;
+
+    if      (F.gp === 'none') { if (r.usedInGP) return false; }
+    else if (F.gp === 'any')  { if (!r.usedInGP) return false; }
+    else if (F.gp) { if (r.grandPrix !== F.gp) return false; }
+
+    if      (F.kt === 'none') { if (r.usedInKT) return false; }
+    else if (F.kt === 'any')  { if (!r.usedInKT) return false; }
+    else if (F.kt) {
+      if (!r.knockoutTour) return false;
+      const kts = r.knockoutTour.split(',').map(s => s.trim());
+      if (!kts.includes(F.kt)) return false;
+    }
+
+    if (F.variant) {
+      const dv = r.trackVariantAlt || r.trackVariant;
+      if (dv !== F.variant) return false;
+    }
+    if (F.entrance) {
+      const de = r.trackEntranceAlt || r.trackEntrance;
+      if (de !== F.entrance) return false;
+    }
+
+    return true;
+  });
 }
 
-function yesNo(val, text) {
-  if (val) return `<span class="fact-value yes"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>${text || 'Yes'}</span>`;
-  return `<span class="fact-value no">No</span>`;
+// ── Tile rendering ──
+const PLAY_SVG = `<svg class="tile-play" width="44" height="44" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+
+function renderTiles() {
+  const routes  = getFiltered();
+  const grid    = document.getElementById('tiles-grid');
+  const noRes   = document.getElementById('no-results');
+  const countEl = document.getElementById('results-count');
+
+  countEl.textContent = routes.length === ROUTES.length
+    ? `${ROUTES.length} routes`
+    : `${routes.length} of ${ROUTES.length} routes`;
+
+  if (!routes.length) {
+    grid.innerHTML = '';
+    noRes.style.display = '';
+    return;
+  }
+  noRes.style.display = 'none';
+
+  grid.innerHTML = routes.map((r, i) => {
+    const badges = [];
+    if (r.usedInGP) {
+      badges.push(`<span class="badge badge-gp">${r.grandPrix ? 'GP: ' + r.grandPrix : 'Grand Prix'}</span>`);
+    }
+    if (r.usedInKT) {
+      badges.push(`<span class="badge badge-kt">${r.knockoutTour ? 'KT: ' + r.knockoutTour : 'Knockout Tour'}</span>`);
+    }
+    if (r.extraSections) {
+      badges.push(`<span class="badge badge-extra">Extra Sections</span>`);
+    }
+    return `<div class="tile" data-i="${i}" role="button" tabindex="0"
+         aria-label="${r.label}: ${r.source} to ${r.destination}">
+      <div class="tile-thumb">
+        ${PLAY_SVG}
+        <span class="tile-label">${r.label}</span>
+      </div>
+      <div class="tile-body">
+        <div class="tile-tracks">
+          <span class="t-source">${r.source}</span>
+          <span class="t-arrow">→</span>
+          <span class="t-dest">${r.destination}</span>
+        </div>
+        ${badges.length ? `<div class="tile-badges">${badges.join('')}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  grid.querySelectorAll('.tile').forEach(el => {
+    const r = routes[parseInt(el.dataset.i)];
+    el.addEventListener('click', () => openModal(r));
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(r); }
+    });
+  });
 }
 
-const PLACEHOLDER_HTML = `
-  <div class="video-wrap">
-    <svg width="52" height="52" viewBox="0 0 24 24" fill="#666"><path d="M8 5v14l11-7z"/></svg>
-    <span>Video coming soon</span>
-  </div>`;
+// ── Modal ──
+const overlay  = document.getElementById('modal-overlay');
+let activeVideo = null;
 
-function showRoute(r) {
-  document.getElementById('disp-label').textContent = r.label;
-  document.getElementById('disp-source').textContent = r.source;
-  document.getElementById('disp-dest').textContent = r.destination;
+const CHECK_SVG = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
+const PLACEHOLDER_HTML = `<div class="video-wrap"><svg width="52" height="52" viewBox="0 0 24 24" fill="#666"><path d="M8 5v14l11-7z"/></svg><span>Video coming soon</span></div>`;
 
-  const container = document.getElementById('video-container');
-  const videoPath = `videos/${r.label}.mp4`;
-  const video = document.createElement('video');
-  video.className = 'video-player';
-  video.controls = true;
+function openModal(r) {
+  document.getElementById('m-label').textContent  = r.label;
+  document.getElementById('m-source').textContent = r.source;
+  document.getElementById('m-dest').textContent   = r.destination;
+
+  // Lazy-load video only when modal opens
+  const container = document.getElementById('m-video-container');
+  const video  = document.createElement('video');
+  video.className  = 'video-player';
+  video.controls   = true;
   video.playsInline = true;
-  const source = document.createElement('source');
-  source.src = videoPath;
-  source.type = 'video/mp4';
-  source.addEventListener('error', () => {
-    container.innerHTML = PLACEHOLDER_HTML;
-  });
-  video.appendChild(source);
+  const src = document.createElement('source');
+  src.src  = `videos/${r.label}.mp4`;
+  src.type = 'video/mp4';
+  src.addEventListener('error', () => { container.innerHTML = PLACEHOLDER_HTML; });
+  video.appendChild(src);
   container.innerHTML = '';
   container.appendChild(video);
+  activeVideo = video;
 
+  // Facts
   const variant  = r.trackVariantAlt  || r.trackVariant  || '—';
   const entrance = r.trackEntranceAlt || r.trackEntrance  || '—';
+  const gpText   = r.grandPrix   || 'Yes';
+  const ktText   = r.knockoutTour || 'Yes';
+  const yes = t => `<span class="fact-value yes">${CHECK_SVG}${t}</span>`;
+  const no  = () => `<span class="fact-value no">No</span>`;
 
-  const gpText = r.grandPrix || 'Yes';
-  const ktText = r.knockoutTour || 'Yes';
+  document.getElementById('m-facts-body').innerHTML = [
+    ['Track Variant',         `<span class="fact-value">${variant}</span>`],
+    ['Track Entrance',        `<span class="fact-value">${entrance}</span>`],
+    ['Used in Grand Prix',    r.usedInGP  ? yes(gpText) : no()],
+    ['Used in Knockout Tour', r.usedInKT  ? yes(ktText) : no()],
+    ['Extra Sections',        r.extraSections        ? yes('Yes') : no()],
+    ['Diff. from Reverse',    r.differentFromReverse ? yes('Yes') : no()],
+  ].map(([label, val]) =>
+    `<div class="fact-row"><span class="fact-label">${label}</span>${val}</div>`
+  ).join('');
 
-  const facts = [
-    ['Track Variant',          `<span class="fact-value">${variant}</span>`],
-    ['Track Entrance',         `<span class="fact-value">${entrance}</span>`],
-    ['Used in Grand Prix',     r.usedInGP  ? `<span class="fact-value yes"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>${gpText}</span>` : `<span class="fact-value no">No</span>`],
-    ['Used in Knockout Tour',  r.usedInKT  ? `<span class="fact-value yes"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>${ktText}</span>` : `<span class="fact-value no">No</span>`],
-    ['Extra Sections',         yesNo(r.extraSections)],
-    ['Diff. from Reverse',     yesNo(r.differentFromReverse)],
-  ];
-
-  document.getElementById('facts-body').innerHTML = facts.map(([label, val]) => `
-    <div class="fact-row">
-      <span class="fact-label">${label}</span>
-      ${val}
-    </div>`).join('');
-
-  const notesCard = document.getElementById('notes-card');
-  const notesText = document.getElementById('notes-text');
+  const notesCard = document.getElementById('m-notes-card');
   if (r.notes) {
-    notesText.textContent = r.notes;
+    document.getElementById('m-notes-text').textContent = r.notes;
     notesCard.style.display = '';
   } else {
     notesCard.style.display = 'none';
   }
 
-  promptEl.style.display = 'none';
-  routeEl.classList.add('visible');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Move focus into modal for accessibility
+  document.getElementById('modal-close').focus();
 }
+
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  if (activeVideo) { activeVideo.pause(); activeVideo = null; }
+}
+
+document.getElementById('modal-close').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+
+// Initial render
+renderTiles();
 </script>
 </body>
 </html>
